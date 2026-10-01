@@ -697,22 +697,6 @@ footer {
   background: #111;
 }
 
-.video-hero::after {
-  content: "Demo video";
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  background: rgba(23, 32, 38, 0.82);
-  color: var(--panel-soft);
-  font-size: .72rem;
-  font-weight: 800;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  padding: 6px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  pointer-events: none;
-}
 
 /* ---------- PROJECT DETAIL LAYOUT ---------- */
 
@@ -1280,4 +1264,15 @@ a.project-card-link:hover .highlighted-project {
 
 html {
   scrollbar-gutter: stable;
+}
+
+.project-hero-split .video-hero {
+  height: auto;
+  aspect-ratio: auto;
+}
+
+.project-hero-split .video-hero video {
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
 }
