@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco Lau | Progressive Overload Device</title>
+  <meta name="description"
+    content="Progressive overload device by Marco Lau — ESP32-C3, MPU6050 IMU, Bluetooth telemetry, force estimation, and gym performance tracking.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">ML</span>
+        <span>Marco Lau</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a class="active" href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="resume.html">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap project-hero project-hero-split">
+      <div class="project-hero-text">
+        <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+        <div class="kicker">Personal project</div>
+
+        <div class="status-row">
+          <span class="status-chip" style="border-color:#b5773f;color:#b5773f;">In progress</span>
+        </div>
+
+        <h1>Progressive Overload Device</h1>
+
+        <p class="intro">
+          A wireless training telemetry device designed to measure barbell motion,
+          estimate force and power output, and make progressive overload more data-driven.
+        </p>
+
+        <div class="tags">
+          <span class="tag">ESP32-C3</span>
+          <span class="tag">MPU6050</span>
+          <span class="tag">Bluetooth</span>
+          <span class="tag">IMU</span>
+          <span class="tag">Fitness Tech</span>
+        </div>
+      </div>
+
+      <div class="project-hero-image image-hero">
+        <div class="photo-placeholder">
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="project-detail-layout">
+          <article class="project-main-card">
+            <div class="build-log">
+
+              <div class="build-log-step">
+                <div class="build-log-label">Why?</div>
+                <div class="build-log-content">
+                  <p>
+                    Tracking gym progress through reps and weight alone can miss how the body is
+                    actually producing force. Two sets can look the same on paper, but the bar speed,
+                    control, fatigue, and power output can be very different.
+                  </p>
+
+                  <p>
+                    This project aims to replace subjective training “feel” with measurable movement
+                    data. By measuring acceleration and angular velocity during a lift, the system can
+                    give a better picture of how force is being produced across each rep.
+                  </p>
+
+                  <p>
+                    The goal is not to replace normal training logs, but to add another layer of data.
+                    Weight and reps show what was lifted. Motion data helps show how it was lifted.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">What?</div>
+                <div class="build-log-content">
+                  <p>
+                    I am developing a wireless telemetry system using an ESP32-C3 and an MPU6050
+                    6-axis IMU connected over I2C. The device is intended to mount to a barbell or
+                    training attachment and capture motion data during lifts.
+                  </p>
+
+                  <p>
+                    The ESP32-C3 reads acceleration and angular velocity data from the IMU, then sends
+                    the data over Bluetooth to a mobile application for processing. The app will use
+                    the motion data to estimate displacement, velocity, force, and power output.
+                  </p>
+
+                  <p>
+                    The long-term goal is to integrate this data into an open-source training app
+                    workflow, so performance metrics can be reviewed alongside normal strength
+                    training records.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Science</div>
+                <div class="build-log-content">
+                  <p>
+                    Progressive overload usually means increasing weight, reps, sets, or training
+                    volume over time. But this does not always capture movement quality. If the same
+                    weight moves slower than last week, or the lifter loses control near the end of a
+                    set, that can show fatigue even if the total reps are the same.
+                  </p>
+
+                  <p>
+                    By measuring acceleration, the system can estimate how the bar is moving through
+                    each rep. From acceleration, velocity and displacement can be estimated through
+                    integration. These values can then be used to estimate force and power.
+                  </p>
+
+                  <p class="equation">
+                    F = ma
+                  </p>
+
+                  <p class="equation">
+                    P = Fv
+                  </p>
+
+                  <p>
+                    Force describes how much the lifter is accelerating the load. Power combines force
+                    and velocity, which makes it useful for understanding explosive performance. A rep
+                    with the same weight but higher velocity produces more power.
+                  </p>
+
+                  <p>
+                    This is useful because strength training is not only about the load on the bar.
+                    Bar speed, acceleration, and power output can show whether the lifter is moving
+                    efficiently, slowing down from fatigue, or improving their ability to produce force
+                    quickly.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Hardware</div>
+                <div class="build-log-content">
+                  <p>
+                    The current hardware plan uses an ESP32-C3 as the main microcontroller because it
+                    supports Bluetooth and is small enough for a wearable or bar-mounted device.
+                  </p>
+
+                  <p>
+                    The MPU6050 provides 3-axis acceleration and 3-axis gyroscope data. The accelerometer
+                    measures linear acceleration, while the gyroscope measures angular velocity. Together,
+                    they give enough information to analyse movement during a lift.
+                  </p>
+
+                  <p>
+                    The ESP32-C3 communicates with the MPU6050 using I2C, then transmits the sampled data
+                    wirelessly to a mobile device for processing and display.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Data processing</div>
+                <div class="build-log-content">
+                  <p>
+                    The main challenge is turning noisy IMU readings into useful training metrics. Raw
+                    acceleration data contains noise, drift, and gravity effects, so the signal needs to
+                    be filtered before it can be used reliably.
+                  </p>
+
+                  <p>
+                    The app will process the data to estimate rep timing, bar path, velocity, and
+                    displacement. From there, estimated force and power can be calculated using the known
+                    load mass and measured acceleration.
+                  </p>
+
+                  <p>
+                    This part of the project is still in development. A major focus will be reducing
+                    drift during integration, filtering noisy motion data, and checking whether the
+                    estimated values are consistent enough to be useful.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Current status</div>
+                <div class="build-log-content">
+                  <p>
+                    This project is currently in progress. The main concept, hardware platform, and
+                    sensing approach have been chosen. The next stage is building the first prototype,
+                    collecting test data, and validating whether the IMU readings can produce useful
+                    rep-by-rep metrics.
+                  </p>
+
+                  <p>
+                    The first tests will focus on simple movements before moving to real lifts. This
+                    should make it easier to debug the sensor readings, Bluetooth transmission, and data
+                    processing pipeline.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Next steps</div>
+                <div class="build-log-content">
+                  <p>
+                    The next steps are to finalise the wiring, build a small enclosure, stream IMU data
+                    over Bluetooth, and create a basic mobile app interface for viewing rep data.
+                  </p>
+
+                  <p>
+                    After that, I want to test the device against controlled movements and compare the
+                    calculated displacement, velocity, and power values against expected results.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </article>
+
+          <aside class="project-side-card">
+            <h2>Project status</h2>
+
+            <p>
+              This page is being used as a live build log while the project is still under development.
+            </p>
+
+            <div class="side-specs">
+              <h2>Planned specs</h2>
+
+              <div class="specs-list">
+                <div class="spec-row"><strong>Status</strong><span>In progress</span></div>
+                <div class="spec-row"><strong>MCU</strong><span>ESP32-C3</span></div>
+                <div class="spec-row"><strong>Sensor</strong><span>MPU6050 6-axis IMU</span></div>
+                <div class="spec-row"><strong>Protocol</strong><span>I2C sensor interface</span></div>
+                <div class="spec-row"><strong>Wireless</strong><span>Bluetooth telemetry</span></div>
+                <div class="spec-row"><strong>Metrics</strong><span>Velocity, displacement, force, power</span></div>
+                <div class="spec-row"><strong>Use case</strong><span>Strength training analysis</span></div>
+              </div>
+            </div>
+
+            <div class="side-specs">
+              <h2>Build checklist</h2>
+
+              <ul>
+                <li>Choose ESP32-C3 and MPU6050 hardware</li>
+                <li>Read IMU data over I2C</li>
+                <li>Stream motion data over Bluetooth</li>
+                <li>Filter acceleration and gyro data</li>
+                <li>Estimate displacement and velocity</li>
+                <li>Calculate force and power output</li>
+                <li>Test during real training movements</li>
+              </ul>
+            </div>
+
+            <div class="side-specs">
+              <h2>Gallery</h2>
+              <p class="small-gallery-note"></p>
+
+              <div class="side-gallery">
+                <div class="gallery-item"></div>
+                <div class="gallery-item"></div>
+                <div class="gallery-item"></div>
+                <div class="gallery-item"></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="small-print">© 2026 Marco Lau.</p>
+    </div>
+  </footer>
+</body>
+
+</html>

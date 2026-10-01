@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco Lau | ECSE Design Competition</title>
+  <meta name="description"
+    content="ECSE Design Competition project by Marco Lau and team ECSQUARE — a browser game played with a custom mechanical controller. ESP32-C3, custom PCB, Cherry-MX switches, 3D-printed enclosure, and a Bluetooth to USB CDC transport pivot. Student's Choice Award.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">ML</span>
+        <span>Marco Lau</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a class="active" href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="resume.html">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap project-hero project-hero-split">
+      <div class="project-hero-text">
+        <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+        <div class="kicker">Team project &middot; ECSE Design Competition</div>
+
+        <div class="status-row">
+        </div>
+
+        <h1>ECSE Design Competition</h1>
+
+        <p class="intro">
+          ECSQUARE; An arcade style browser game you play with a custom mechanical controller, built with my team for the
+          University of Auckland ECSE Design Competition. My role centred on the mechanical enclosure and
+          PCB integration, plus a hand in the firmware and system architecture. The build ran on an
+          ESP32-C3 with a custom PCB, Cherry-MX switches, and a 3D-printed enclosure, and it won the
+          Student's Choice Award.
+        </p>
+
+        <div class="tags">
+          <span class="tag">CAD Modelling</span>
+          <span class="tag">PCB Integration</span>
+          <span class="tag">ESP32-C3</span>
+          <span class="tag">Web Serial API</span>
+          <span class="tag">Embedded C++</span>
+        </div>
+      </div>
+
+      <div class="project-hero-image image-hero">
+        <img src="ECSE_Design_Comp_34 (1).png" alt="ECSQUARE mechanical controller in front of the game on screen">
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="project-detail-layout">
+          <article class="project-main-card">
+            <div class="build-log">
+
+              <div class="build-log-step">
+                <div class="build-log-label">Why?</div>
+                <div class="build-log-content">
+                  <p>
+                    The ECSE Design Competition gives teams an open brief and a short runway to turn an idea
+                    into something people can actually pick up and use. 2026's theme was 'Arcade' and my team, 
+                    ECSQUARE decided early that we
+                    wanted a project judged on how it felt in someone's hands, not just how it looked on a
+                    slide. That pushed us toward a game with a physical controller: something a judge could
+                    walk up to, play for thirty seconds, and immediately get.
+                  </p>
+                  <p>
+                    I gravitated toward the parts of the project that sit between mechanical and electrical
+                    work, because that boundary is where I learn the most. Getting a PCB to live inside a
+                    printed enclosure, with switches that feel right and connectors that actually line up, is
+                    a very different problem from getting either part working on its own.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">What?</div>
+                <div class="build-log-content">
+                  <p>
+                    We built a fast, arcade-style game that runs in the browser on an HTML5 Canvas, controlled
+                    by a custom mechanical input device. Cherry-MX switches sit on a custom PCB driven by an
+                    ESP32-C3, the whole thing housed in a 3D-printed enclosure. The controller streams button
+                    events to the browser, and the game engine turns those into play.
+                  </p>
+                  <p>
+                    The design goal we kept coming back to was that the game should be addictive to play rather
+                    than technically impressive to describe. That framing shaped a lot of decisions: the
+                    switches had to feel good, the inputs had to land instantly, and the whole loop from
+                    keypress to on-screen action had to feel tight. A lot of the engineering below exists in
+                    service of that one feeling.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">My role &amp; the team</div>
+                <div class="build-log-content">
+                  <p>
+                    This was a team effort. ECSQUARE was Thomas, Navini, Vanessa,
+                    John, and me. The game engine, artwork, and gameplay design were a shared effort
+                    across the team.
+                  </p>
+                  <p>
+                    My main contributions were the mechanical enclosure design and getting the PCB to
+                    integrate cleanly with it, with a secondary hand in the firmware and some of the
+                    architecture decisions, including the transport pivot described further down. In practice
+                    that meant I spent most of my time on the physical build and the layer where hardware
+                    meets software.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Mechanical &amp; electrical co-design</div>
+                <div class="build-log-content">
+                  <p>
+                    The enclosure and the PCB could not be designed in isolation, because each one constrains
+                    the other. The switch positions on the board set where the keycaps poke through the top
+                    plate. The mounting holes on the board set where the standoffs go in the print. The USB
+                    connector on the board sets where the cutout has to be in the wall of the case. Get any one
+                    of these wrong and the parts do not go together.
+                  </p>
+                  <p>
+                    So I treated it as a single co-design problem. I worked from the PCB's real dimensions:
+                    connector positions, mounting-hole pattern, and the tallest components, then built the
+                    enclosure around those. Connector cutouts had to align with where the USB port actually
+                    sat, mounting holes had to match the board's hole pattern, and the internal clearances had
+                    to respect component heights so nothing fouled the lid.
+                  </p>
+                  <p>
+                    The part that caught me out first was tolerance stack-up. Every dimension has some error:
+                    the printer over-extrudes slightly, the board fab has its own tolerances, and those small
+                    errors add up across a chain of features. A cutout that is exactly right in CAD can be a
+                    fraction of a millimetre off once you account for print shrinkage and connector placement
+                    tolerance, and that fraction is the difference between a cable seating cleanly and not
+                    fitting at all. I ended up designing in deliberate clearance at the connector and
+                    iterating the print rather than trusting the nominal numbers.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">The input-lag problem: Bluetooth to USB CDC</div>
+                <div class="build-log-content">
+                  <p>
+                    The most interesting engineering decision on the project was how the controller talks to
+                    the game. We started with Bluetooth Low Energy, because a wireless controller felt like the
+                    obvious, tidy choice. In play testing it felt slightly off: presses landed a beat late, and
+                    for a game whose whole appeal is feeling instant, that was a real problem.
+                  </p>
+                  <p>
+                    Rather than paper over it, I traced it back to the transport. BLE does not send data the
+                    instant you have it. A peripheral only gets to transmit during connection events, which are
+                    spaced by the connection interval, and the minimum interval is 7.5&nbsp;ms and is often
+                    negotiated higher. So keypresses were being batched to those interval boundaries and
+                    arriving in clumps, adding latency and jitter that you could feel even if you could not put
+                    a number on it.
+                  </p>
+                  <pre><code>BLE:      keypress > wait for next connection event (≥7.5 ms, often more) > send
+USB CDC:  keypress > next USB frame (~1 ms) > read by browser</code></pre>
+                  <p>
+                    The fix was to change transports. We re-architected the link to USB CDC serial, with the
+                    game reading the stream directly through the Web Serial API in the browser. USB CDC is
+                    bounded by USB frame timing on the order of a millisecond rather than the connection
+                    interval, which cut the theoretical input latency significantly and, more importantly, made
+                    the controller feel immediate.
+                  </p>
+                  <p>
+                    I think of this less as fixing a mistake and more as a design tradeoff we made with better
+                    information. BLE bought us wireless freedom; USB CDC bought us latency and determinism. For
+                    a reaction-based game, latency won. The useful lesson for me was learning to reason at the
+                    transport layer and to root-cause a "feel" problem down to the protocol underneath it,
+                    rather than assuming the lag was in the game code.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">ESP32-C3 vs. S3</div>
+                <div class="build-log-content">
+                  <p>
+                    A reflection worth recording. The ESP32-C3 we used has a built-in USB Serial/JTAG
+                    controller, which is exactly what let us do native USB Serial and pair it with Web
+                    Serial. What it does not have is the full USB-OTG peripheral, so it cannot be used as an
+                    arbitrary USB device class.
+                  </p>
+                  <p>
+                    The ESP32-S3 does have that peripheral, and with it the controller could have been used as
+                    a native USB HID keyboard. That would have made it truly plug-and-play: the operating
+                    system would see a keyboard, and the game (or any application) could read keypresses with
+                    no Web Serial permission prompt and no browser dependency at all.
+                  </p>
+                  <p>
+                    I do not regret the C3, but I understand it now as a design tradeoff rather than a default.
+                    The C3 got us low-latency serial and did the job. An S3 would have traded a little board
+                    cost and complexity for a cleaner, more universal input path. Knowing exactly why one chip
+                    would have changed the architecture is the kind of thing I want to be able to explain, not
+                    just feel.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Firmware &amp; debouncing</div>
+                <div class="build-log-content">
+                  <p>
+                    Mechanical switches do not close cleanly without some form of debouncing. When a Cherry-MX switch is pressed, the contacts
+                    bounce for a short time, and a naive firmware read would see one physical press as several
+                    rapid presses. In a game that reads inputs every cycle, that shows up as phantom actions.
+                  </p>
+                  <p>
+                    So the firmware debounces each switch: after a state change it waits for the reading to
+                    stay stable for a short window before it accepts the new state as real. That gives one clean
+                    event per press and keeps the input stream honest before it ever reaches the game. It is a
+                    small detail, but it is the difference between a controller that feels precise and one that
+                    feels twitchy.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Results</div>
+                <div class="build-log-content">
+                  <p>
+                    On the day, the thing worked the way we wanted it to: judges and other students walked up,
+                    played, and kept playing. The controller felt responsive, the switches felt good, and the
+                    game did the one job we set for it, which was to be fun to pick up.
+                  </p>
+                  <p>
+                    ECSQUARE won the Student's Choice Award, which felt like the right award for a project we
+                    had deliberately built around how it felt to use. Several judges asked teams for contact
+                    details afterwards for internship recruitment, which was a nice signal that the hands-on,
+                    experience-first approach landed.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Outcome</div>
+                <div class="build-log-content">
+                  <p>
+                    The biggest thing I took away is how much a project lives or dies at the interfaces:
+                    between the PCB and the enclosure, between the firmware and the game, between the
+                    controller and the browser. Each part was manageable on its own. The engineering was in
+                    making them line up, both physically through tolerance stack-up and logically through the
+                    right transport choice.
+                  </p>
+                  <p>
+                    It also reinforced something the Furuta project taught me: a system is only as good as the
+                    signals moving through it. Chasing the input lag down to the BLE connection interval was
+                    the same instinct as chasing encoder noise down to a bad cable. Trust the feel, but do not
+                    stop until you can point at the actual cause.
+                  </p>
+                  <p>
+                    Thanks for reading about this one. If you have questions or want to talk about the build,
+                    please feel free to reach out.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </article>
+          <aside class="project-side-card">
+            <h2>Project gallery</h2>
+
+            <div class="side-gallery">
+              <button class="gallery-button" type="button">
+                <img src="ECSE_Design_Comp_21.png" alt="Full ECSQUARE controller build">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="PCBECSEDesign.png" alt="Custom PCB with Cherry-MX switches and ESP32-C3">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="DSC04097.jpg" alt="Controller in hand">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="ECSE_Design_Comp_53 (1).png" alt="Team ECSQUARE with the People's Choice Award">
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="small-print">© 2026 Marco Lau.</p>
+    </div>
+  </footer>
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+  <script>
+    const galleryButtons = document.querySelectorAll(".gallery-button");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxClose = document.querySelector(".lightbox-close");
+
+    galleryButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const img = button.querySelector("img");
+
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+
+        lightbox.classList.add("active");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = "";
+      lightboxImg.alt = "";
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("active")) {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+
+</html>

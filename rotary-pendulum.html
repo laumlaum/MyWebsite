@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco Lau | Furuta Pendulum</title>
+  <meta name="description"
+    content="Furuta pendulum project by Marco Lau — Arduino Uno, ATmega328P, encoder feedback, stepper motor control, PID testing, and LQR balancing.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">ML</span>
+        <span>Marco Lau</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a class="active" href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="resume.html">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap project-hero project-hero-split">
+      <div class="project-hero-text">
+        <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+        <div class="kicker">Personal project</div>
+
+        <div class="status-row">
+        </div>
+
+        <h1>Furuta Pendulum</h1>
+
+        <p class="intro">
+          A rotary inverted pendulum built to turn control theory into something physical.
+          I used an Arduino Uno, a stepper motor, and a quadrature encoder, with LQR control
+          to balance the pendulum upright.
+        </p>
+
+        <div class="tags">
+          <span class="tag">Control Systems</span>
+          <span class="tag">Arduino Uno</span>
+          <span class="tag">ATmega328P</span>
+          <span class="tag">LQR</span>
+          <span class="tag">C++</span>
+        </div>
+  
+      </div>
+
+      <div class="project-hero-image image-hero video-hero youtube-hero">
+        <iframe src="https://www.youtube-nocookie.com/embed/fmiFmua_sis?rel=0" title="Furuta pendulum balancing demo"
+          loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="project-detail-layout">
+          <article class="project-main-card">
+            <div class="build-log">
+
+              <div class="build-log-step">
+                <div class="build-log-label">Why?</div>
+                <div class="build-log-content">
+                  <p>
+                    After finishing ELECTENG291, which covered second-order circuit analysis, Laplace
+                    transforms, and frequency response, I realised these ideas were the foundation of
+                    control theory. I had not taken a formal controls paper yet, so I decided to learn it
+                    the hands-on way through a hardware project. Combining the microcontroller fundamentals
+                    from COMPSYS201 (the ATmega328P) with self-taught state-space control made for a good
+                    learning build.
+                  </p>
+                  <p>
+                    This write-up is based on independent self-study rather than formal coursework in control theory, so
+                    some explanations may be simplified or imprecise; it is intended as a documented learning project,
+                    not an authoritative reference.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">What?</div>
+                <div class="build-log-content">
+                  <p>
+                    I built a rotary inverted pendulum using a NEMA17 stepper motor, a TMC2209
+                    SilentStepStick driver, a quadrature encoder, and an Arduino Uno R3. The encoder
+                    measures the pendulum angle while the stepper motor rotates the arm to keep the
+                    pendulum balanced upright.
+                  </p>
+                  <p>
+                    I first tried a basic cascaded PID controller, but it was difficult to tune and did
+                    not give the stability I wanted. This pushed me to learn more controls theory by
+                    myself, especially PID tuning, state-space modelling, and LQR control. A large part
+                    of this project was spent researching YouTube lectures and tutorials, including
+                    videos from the MATLAB channel and other controls-focused resources, then applying
+                    that theory to my own hardware.
+                  </p>
+                  <p>
+                    After learning the basics of LQR, I switched from PID to an LQR controller because it
+                    controls the system using the full state instead of reacting to only one error at a
+                    time. This meant I had to model the system mathematically, understand the state-space
+                    form, choose suitable Q and R values, and calculate the controller gains using MATLAB.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Mechanical design</div>
+                <div class="build-log-content">
+                  <p>
+                    The mechanical design was kept simple so I could focus on the control system.
+                    I found a pendulum rod around the house that already had a rough 90-degree bend at
+                    the right height, which made it a good fit for the rotary pendulum layout.
+                  </p>
+
+                  <p>
+                    For the main support structure, I sourced tower-style 3D print files online that
+                    matched the rod size well. This gave the pendulum a rigid frame without needing to
+                    design the entire structure from scratch.
+                  </p>
+
+                  <p>
+                    I designed one custom part: the adapter that connects the encoder shaft to the
+                    pendulum rod. The encoder shaft was 6 mm from the datasheet, while the pendulum
+                    rod measured around 6.1–6.2 mm with calipers. I modelled the adapter in Fusion 360
+                    so one side fit the encoder shaft and the other side fit the rod.
+                  </p>
+
+                  <p>
+                    The first adapter version was too short and allowed too much wobble, which affected
+                    encoder alignment and made the motion less stable. I remodelled it with a taller,
+                    more rigid fit to reduce unwanted movement.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Debugging</div>
+                <div class="build-log-content">
+                  <p>
+                    One of the hardest issues was noisy encoder readings. I used an oscilloscope
+                    to check the encoder signals and narrow down whether the issue was wiring,
+                    pull-ups, power, or code.
+                  </p>
+                  <p>
+                    The fault ended up being a bad USB cable connected to the Arduino. Replacing
+                    it fixed the signal problem and made the controller behave much more
+                    consistently.
+                  </p>
+                  <p>
+                    I also had to tune the stepper motor driver. The TMC2209 SilentStepStick sets its coil
+                    current from the VREF voltage, which I adjusted with a small potentiometer and measured
+                    against ground. I aimed for around 90% of the motor's rated current to keep it from
+                    overheating. On this driver, VREF sets the RMS current per phase through the
+                    relationship in the SilentStepStick datasheet:
+                  </p>
+                  <pre><code>VREF = Irms × 2.5 × √2 × Rsense</code></pre>
+                  <p>
+                    where Irms is the target RMS current per phase and Rsense is the current-sense resistor
+                    fitted to the board (0.11 Ω on this module). The 2.5 is the driver's internal reference
+                    scaling, and the √2 converts the peak current the driver actually regulates into the RMS
+                    value the motor is rated for. For my target of 1.33 A RMS this works out to:
+                  </p>
+                  <pre><code>VREF = 1.33 × 2.5 × √2 × 0.11 ≈ 0.5 V</code></pre>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Signal conditioning</div>
+                <div class="build-log-content">
+                  <p>
+                    Signal conditioning is about taking a raw signal and making it clean enough for the microcontroller
+                    to read reliably. This part of the project pulled together theory from a few papers. COMPSYS201
+                    taught me how the ATmega328P handles interrupts and how pull-up resistors give an input pin a
+                    defined state. ELECTENG291 gave me the DC and AC circuit theory behind the capacitors and filtering
+                    I used on the power supply, while ELECTENG292 covered the electronics side, such as logic levels and
+                    where signal noise comes from. Then ELECTENG209 taught me that most of that is a lie. On paper a
+                    signal is a clean line and a logic level is exactly HIGH or LOW, but in reality every wire picks up
+                    noise, every edge has a slope, and nothing sits still like the maths says it should. 209 was about
+                    designing electronics that still work in that mess, which is exactly what this project turned into.
+                  </p>
+
+                  <p>
+                    The quadrature encoder outputs digital pulses that the Arduino reads using interrupt
+                    pins. To make these readings reliable, I used pull-up resistors so each encoder line
+                    had a defined HIGH state when it was not being actively pulled LOW. A digital pin
+                    decides between HIGH and LOW by comparing the voltage against a threshold, so if a line
+                    is left floating it can sit between these thresholds. In that region, small amounts of
+                    noise can flip the reading back and forth and cause incorrect angle readings.
+                  </p>
+
+                  <p>
+                    I also added a 100µF capacitor across the motor power supply. The stepper motor and
+                    driver can cause sudden current changes, especially when the motor starts, stops, or
+                    changes speed, and these can create voltage dips and noise on the supply rail. The
+                    capacitor helps smooth these out by storing and releasing charge. When the voltage
+                    dips, it provides extra current for a short time, and when there is a spike, it absorbs
+                    some of that energy. A larger capacitor like this handles the slower, bigger current
+                    swings, while a small ceramic capacitor in parallel would handle higher-frequency
+                    noise.
+                  </p>
+
+                  <p>
+                    This was important because the controller depends on accurate sensor feedback. Even if
+                    the control code is correct, noisy encoder signals or an unstable supply can make the
+                    controller think the pendulum is falling when it isn't. I found this out the hard way
+                    when I killed my first few stepper drivers (A4988 and DRV8825). At the time I put it
+                    down to not having a capacitor on the power supply, though disconnecting the motor while
+                    the driver is still powered is another common way these boards fail. The encoder would
+                    also sometimes read random angles. After adding the pull-ups and capacitor, the random
+                    readings stopped and the pendulum balanced far more reliably.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">LQR gains</div>
+                <div class="build-log-content">
+                  <p>
+                    The Furuta pendulum was modelled using a linearised state-space equation:
+                  </p>
+
+                  <p class="equation">
+                    ẋ = Ax + Bu
+                  </p>
+
+                  <p>
+                    The state vector was:
+                  </p>
+
+                  <p class="equation">
+                    x = [θ, θ̇, α, α̇]
+                  </p>
+
+                  <figure class="control-diagram">
+                    <button class="gallery-button diagram-button" type="button">
+                      <img src="ControlsDiagram.png" alt="LQR control block diagram for the Furuta pendulum">
+                    </button>
+
+                    <figcaption>
+                      LQR control flow showing state feedback, velocity integration, command limits,
+                      motor control, and encoder-based state estimation. (Click to enlarge, then zoom in)
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    where θ is the motor shaft angle and α is the pendulum angle from upright.
+                    Using the measured arm length, pendulum length, and pendulum mass, the model
+                    produced the A and B matrices that describe the system motion.
+                  </p>
+
+                  <p>
+                    I then used MATLAB to calculate the LQR gains. The controller was tuned using:
+                  </p>
+
+                  <pre><code>Q = diag([1, 0.1, 200, 20]);
+R = 0.05;</code></pre>
+
+                  <p>
+                    Q controls how much each state is penalised, while R controls how costly motor
+                    effort is. I gave the pendulum angle the largest penalty because keeping the rod
+                    upright was the main goal.
+                  </p>
+
+                  <p>
+                    MATLAB solved the Riccati equation and produced the SI-unit gain matrix K, which holds
+                    one feedback gain for each of the four states:
+                  </p>
+
+                  <pre><code>K = [-4.47, -4.40, 824.2, 97.9]</code></pre>
+
+                  <p>
+                    These gains then had to be converted into the units the firmware actually works in. The
+                    arm gains (θ, θ̇) were already in the right units, so they carried over unchanged. Only
+                    the pendulum gains (α, α̇) needed converting, from radians in the model to encoder steps
+                    in the firmware, using 1600 steps per revolution:
+                  </p>
+
+                  <pre><code>Kα  = 824.2 × 1600/360 = 3663.2
+Kα̇ = 97.9  × 1600/360 = 435.0</code></pre>
+
+                  <p>
+                    This gave the final firmware gains:
+                  </p>
+
+                  <pre><code>Kθ     = -4.47
+Kθ̇    = -4.40
+Kα     = 3663.2
+Kα̇    = 435.0</code></pre>
+
+                  <p>
+                    The final control law was:
+                  </p>
+
+                  <p class="equation">
+                    e = r - x, &nbsp; u = Ke
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Why LQR works</div>
+                <div class="build-log-content">
+                  <p>
+                    To finish this section, I want to explain how LQR works in a way that makes sense to
+                    me. LQR is a way of choosing the feedback gains instead of guessing them. With four
+                    states that all affect each other, tuning K by hand would be very difficult, because
+                    changing one gain changes how the whole system behaves. LQR avoids this. I describe
+                    the physics once using the A and B matrices, describe what I care about once using Q
+                    and R, and let MATLAB find the gains that best match both.
+                  </p>
+
+                  <p>
+                    The word "best" has a specific meaning here. LQR minimises a cost that adds up two
+                    things over time: how far the states are from where I want them, weighted by Q, and
+                    how much motor effort I use, weighted by R. Solving the Riccati equation is what finds
+                    the single gain matrix K that gives the lowest total cost. So Q and R are not random
+                    numbers. They are how I tell the controller to trade off accuracy against effort, and
+                    K comes out of that choice. Choosing Q and R was not a one-time step either. Like the
+                    iterative design process that gets reiterated across all my engineering papers, I had
+                    to try values, test how the pendulum behaved, and adjust. This is where most of the
+                    compromise happened, because stronger pendulum gains corrected faster but used more
+                    motor effort and made the arm jittery, while softer gains were smoother but let the rod
+                    lean further before reacting.
+                  </p>
+
+                  <p>
+                    Once I have K, the controller itself is simple. Every control cycle it reads all four
+                    states, multiplies each one by its gain, and adds them together into a single command,
+                    u = Ke. This is the main idea of full-state feedback. The controller does not look at
+                    the pendulum angle on its own. It looks at the position and speed of both the arm and
+                    the rod at the same time, and combines them into one correction. The large pendulum
+                    gains make the system react strongly when the rod starts to fall, while the smaller arm
+                    gains slowly pull the arm back toward centre.
+                  </p>
+
+                  <p>
+                    One thing worth being clear about is what "optimal" means. LQR is only optimal for the
+                    linear model I built and for the Q and R I chose. It is not the best possible
+                    controller in every situation. It also only works well near the upright position,
+                    which is why it can balance the pendulum but cannot swing it up from hanging on its
+                    own.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Engineering assumptions</div>
+                <div class="build-log-content">
+                  <p>
+                    To make the LQR controller practical to implement, several assumptions were made
+                    about the physical system. These assumptions helped simplify the model, but they
+                    also highlighted where real hardware behaviour could differ from the simulation.
+                  </p>
+
+                  <ul class="project-bullet-list">
+                    <li>
+                      The pendulum rod was treated as a rigid body with a fixed length and mass
+                      distribution.
+                    </li>
+                    <li>
+                      Friction at the encoder pivot was assumed to be small enough for the pendulum
+                      to swing freely.
+                    </li>
+                    <li>
+                      The encoder was assumed to register every quadrature edge without missing counts, even during fast
+                      swings. A missed count would permanently offset the measured angle from the true angle, since the
+                      controller integrates edges rather than reading an absolute position. This held once the pull-ups
+                      and supply decoupling gave clean edges on the interrupt pins.
+                    </li>
+                    <li>
+                      The zero reference for α was assumed to stay fixed once set at upright. The encoder is
+                      incremental, so it measures change from a starting point rather than an absolute angle. Any slip
+                      at the shaft coupling or a missed count would shift this reference and bias every later reading.
+                    </li>
+                    <li>The arm was treated as an independent input rather than part of the coupled dynamics. Because
+                      the stepper holds its commanded position regardless of the small forces the rod applies, the model
+                      assumes the pendulum's motion does not react back on the arm. A full Furuta model couples the two
+                      together, so this is a deliberate simplification that made the system easier to model and control.
+                    </li>
+                    <li>
+                      The LQR model was linearised around the upright position, so the controller was
+                      mainly valid when the pendulum was already close to vertical.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Results</div>
+                <div class="build-log-content">
+                  <p>
+                    Once the gains were tuned, the pendulum held itself upright and stayed balanced until
+                    it was disturbed. It could recover from a light tap before the rod passed the 45 degree
+                    give-up angle, past which the controller disengages and lets the arm stop. Left alone it
+                    stayed upright indefinitely, settling to within about 1–2 degrees of vertical, with a
+                    small steady wobble from the stepper's finite step size.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Outcome</div>
+                <div class="build-log-content">
+                  <p>
+                    This project helped me connect embedded programming, motor control, signal
+                    debugging, and control theory in one build. I learned that a controller is
+                    only as good as the hardware signals feeding it, and that debugging the
+                    physical system matters just as much as the code.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Next steps</div>
+                <div class="build-log-content">
+                  <p>
+                    The pendulum currently balances once it is placed upright. My next goal is
+                    swing-up control, where the system brings itself from the hanging position
+                    to upright automatically.
+                  </p>
+                  <p>
+                    I want to explore reinforcement learning for this using MuJoCo, MATLAB,
+                    and Simulink. The plan is to train and test the swing-up behaviour in
+                    simulation first, then combine it with the existing LQR controller for
+                    upright balancing.
+                  </p>
+                  <p> Thank you for reading about my project! If you have any questions or feedback, please feel free to
+                    reach out.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </article>
+          <aside class="project-side-card">
+            <h2>Project gallery</h2>
+
+            <div class="side-gallery">
+              <button class="gallery-button" type="button">
+                <img src="MainFurutaPic.jpg" alt="Furuta pendulum full build">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="FurutaCircuitImage.png" alt="Arduino and motor driver wiring">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="AdapterTooSmall.jpg" alt="Motor-encoder adapter">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="TMC2209OnBreadBoard.jpg" alt="Stepper motor driver on breadboard">
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="small-print">© 2026 Marco Lau.</p>
+    </div>
+  </footer>
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+  <script>
+    const galleryButtons = document.querySelectorAll(".gallery-button");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxClose = document.querySelector(".lightbox-close");
+
+    galleryButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const img = button.querySelector("img");
+
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+
+        lightbox.classList.add("active");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = "";
+      lightboxImg.alt = "";
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("active")) {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+
+</html>

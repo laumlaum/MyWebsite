@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco Lau | Custom Macropad</title>
+  <meta name="description"
+    content="Custom 3x3 macropad build by Marco Lau — electronics, soldering, 3D printing, and firmware.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">ML</span>
+        <span>Marco Lau</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a class="active" href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="resume.html">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap project-hero project-hero-split">
+      <div class="project-hero-text">
+        <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+        <div class="kicker">Personal project</div>
+
+        <div class="status-row">
+        </div>
+
+        <h1>Custom Macropad</h1>
+
+        <p class="intro">
+          A 3x3 mechanical macropad built as a first hands-on project in electronics,
+          soldering, 3D printing, and firmware. It is now used to automate daily tasks
+          on my PC.
+        </p>
+
+        <div class="tags">
+          <span class="tag">Electronics</span>
+          <span class="tag">Soldering</span>
+          <span class="tag">Firmware</span>
+          <span class="tag">USB HID</span>
+          <span class="tag">3D Printing</span>
+        </div>
+      </div>
+
+      <div class="project-hero-image image-hero">
+        <img src="MacroPad3.png" alt="Finished custom 3x3 macropad">
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="project-detail-layout">
+          <article class="project-main-card">
+            <div class="build-log">
+
+              <div class="build-log-step">
+                <div class="build-log-label">Why?</div>
+                <div class="build-log-content">
+                  <p>
+                    I wanted to start with a simple project that would introduce me to
+                    electronics, 3D printing, soldering, and firmware. A macropad was a good
+                    first build because it was small enough to finish, but still involved real
+                    hardware and software skills.
+                  </p>
+                  <p>
+                    The goal was to build something useful instead of only doing a tutorial.
+                    I wanted a device I could actually use on my PC for shortcuts, repeated
+                    actions, and daily task automation.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">What?</div>
+                <div class="build-log-content">
+                  <p>
+                    I built a custom 3x3 mechanical macropad using nine Outemu Orange switches,
+                    hand-soldered wiring, firmware for USB keyboard input, and a 3D printed PLA
+                    enclosure.
+                  </p>
+                  <p>
+                    The macropad acts like a small keyboard. Each switch can send a key press,
+                    shortcut, or command to the PC. This made it useful for automating tasks
+                    while also giving me a practical introduction to how simple input devices
+                    are built.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Mechanical design</div>
+                <div class="build-log-content">
+                  <p>
+                    The enclosure was 3D printed in PLA and designed to hold the switches in a
+                    compact 3x3 layout. The main focus was keeping the shape simple while making
+                    sure the switches clipped in securely.
+                  </p>
+                  <p>
+                    This gave me practice designing around real component dimensions, checking
+                    fitment, and understanding how small tolerance issues can affect the final
+                    assembly.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Electronics</div>
+                <div class="build-log-content">
+                  <p>
+                    This also connected to content I had briefly touched on in ELECTENG291, where
+                    diodes were introduced as components that allow current to flow more easily in
+                    one direction than the other.
+                  </p>
+
+                  <p>
+                    In the macropad, I used a diode in series with each switch. In a keyboard matrix,
+                    the firmware scans rows and columns to detect which switch is pressed. The diode
+                    helps control the direction of current flow so that current cannot travel backwards
+                    through other pressed switches.
+                  </p>
+
+                  <p>
+                    Without diodes, pressing multiple keys at the same time can create unwanted current
+                    paths between rows and columns. This can make the microcontroller detect an extra
+                    key that was never physically pressed, which is known as ghosting.
+                  </p>
+
+                  <p>
+                    By isolating each switch path, the diodes made the matrix more reliable and helped
+                    me understand how a small component can affect the behaviour of the whole circuit.
+                  </p>
+                </div>
+              </div>
+              <div class="build-log-step">
+                <div class="build-log-label">Firmware</div>
+                <div class="build-log-content">
+                  <p>
+                    The firmware reads each switch input and sends keyboard commands to the PC
+                    using USB HID. This lets the macropad behave like a normal keyboard, but with
+                    custom shortcuts assigned to each key.
+                  </p>
+                  <p>
+                    I used this project to understand how physical button presses turn into
+                    digital inputs, and how firmware can translate those inputs into useful
+                    computer commands.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Outcome</div>
+                <div class="build-log-content">
+                  <p>
+                    The final result was a working 3x3 macropad that I now use on my PC for
+                    shortcuts and task automation. It gave me a practical introduction to
+                    electronics, soldering, firmware, and 3D printed enclosure design.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Next steps</div>
+                <div class="build-log-content">
+                  <p>
+                    Possible upgrades include a cleaner enclosure design, custom keycaps, RGB
+                    lighting, a PCB version, or more advanced firmware with multiple layers and
+                    profiles.
+                  </p>
+                  <p>
+                    A PCB version would be the most useful next step because it would make the
+                    wiring cleaner, easier to assemble, and more reliable than hand-soldered
+                    connections.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </article>
+
+          <aside class="project-side-card">
+            <h2>Project gallery</h2>
+            <div class="side-gallery">
+              <button class="gallery-button" type="button">
+                <img src="MacroPad1.png" alt="Finished 3x3 custom macropad">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="MacroPad2.jpg" alt="Macropad build progress">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="MacroPad3.png" alt="Macropad switches and enclosure">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="MacroPad4.png" alt="Custom macropad close-up">
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="small-print">© 2026 Marco Lau.</p>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    const galleryButtons = document.querySelectorAll(".gallery-button");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxClose = document.querySelector(".lightbox-close");
+
+    galleryButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const img = button.querySelector("img");
+
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+
+        lightbox.classList.add("active");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = "";
+      lightboxImg.alt = "";
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("active")) {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+
+</html>
