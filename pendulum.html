@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco Lau | Furuta Pendulum</title>
+  <meta name="description"
+    content="Furuta pendulum by Marco Lau: Arduino Uno, stepper motor, quadrature encoder and an LQR controller that balances a rotary inverted pendulum.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Document-style project write-up. Page-specific, so style.css is unchanged. */
+    section.doc-section {
+      background: var(--panel-soft);
+      padding: 48px 0 72px;
+    }
+
+    .doc {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 24px;
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .doc .back-link { margin-bottom: 22px; }
+
+    .doc h1 {
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .doc .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 16px;
+    }
+
+    .doc .tags { margin-bottom: 8px; }
+
+    .doc h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 48px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 28px 0 8px;
+    }
+
+    .doc p { margin-bottom: 14px; color: #2b3840; }
+
+    .doc .note {
+      font-size: .88rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Figures */
+
+    .figure-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 22px 0 26px;
+    }
+
+    .doc figure { margin: 22px 0 26px; }
+    .figure-row figure { margin: 0; }
+
+    .doc figure .gallery-button img {
+      aspect-ratio: 4 / 3;
+      border-radius: 10px;
+    }
+
+    .doc figure.wide .gallery-button img {
+      aspect-ratio: auto;
+      object-fit: contain;
+      background: #111;
+    }
+
+    .doc figcaption {
+      margin-top: 8px;
+      font-size: .86rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .doc video {
+      width: 100%;
+      max-height: 75vh;
+      display: block;
+      border-radius: 10px;
+      background: #111;
+    }
+
+    /* Table */
+
+    .table-wrap { overflow-x: auto; margin: 18px 0 24px; }
+
+    .doc table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    .doc th {
+      text-align: left;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--ink);
+      white-space: nowrap;
+    }
+
+    .doc td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      color: #2b3840;
+    }
+
+    .doc td:first-child { font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+    /* Equations and code (same look as .equation in style.css) */
+    .doc pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      background: #edf5f7;
+      color: var(--ink);
+      border: 1px solid #cfe0e7;
+      overflow-x: auto;
+      margin: 0.75rem 0 1.1rem;
+    }
+
+    .doc .equation { margin: 0.75rem 0 1.1rem; }
+
+    .doc .equation.center { text-align: center; }
+
+    .doc ul.project-bullet-list { margin-top: 6px; margin-bottom: 14px; }
+
+    @media (max-width: 640px) {
+      .figure-row { grid-template-columns: 1fr; }
+      .doc td:first-child { white-space: normal; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">ML</span>
+        <span>Marco Lau</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a href="contact.html">Contact</a>
+        <a href="resume.html">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="doc-section">
+      <article class="doc">
+
+        <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+        <h1>Furuta Pendulum</h1>
+        <p class="subtitle">A rotary inverted pendulum balanced with LQR control on an Arduino Uno.</p>
+        <!-- ================= INTRODUCTION ================= -->
+        <h2>Introduction</h2>
+        <p>
+          ELECTENG291 covered second-order circuits, Laplace transforms and frequency response, and I realised
+          these are the foundations of control theory. I hadn't taken a controls paper yet, so I decided to learn
+          it hands-on by combining the ATmega328P fundamentals from COMPSYS201 with self-taught state-space control.
+        </p>
+        <p>
+          The result is a rotary inverted pendulum: a quadrature encoder measures the pendulum angle while a
+          stepper motor swings the arm to keep the rod balanced upright.
+        </p>
+        <p class="note">
+          This write-up is based on independent self-study rather than formal controls coursework, so some
+          explanations may be simplified.
+        </p>
+
+        <div class="figure-row">
+          <figure>
+            <button class="gallery-button" type="button">
+              <img src="MainFurutaPic.jpg" alt="Furuta pendulum full build">
+            </button>
+            <figcaption>Figure 1: The completed Furuta pendulum.</figcaption>
+          </figure>
+          <figure>
+            <button class="gallery-button" type="button">
+              <img src="FurutaCircuitImage.png" alt="Arduino and motor driver wiring">
+            </button>
+            <figcaption>Figure 2: Arduino Uno, TMC2209 driver and encoder wiring.</figcaption>
+          </figure>
+        </div>
+
+        <!-- ================= DESIGN ================= -->
+        <h2>Design and Mechanical Assembly</h2>
+        <p>
+          I kept the mechanical side simple so I could focus on the control system. Each component was chosen to
+          make the build reliable and quick to iterate on.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Design choice</th>
+                <th>Reasoning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Microcontroller</td>
+                <td>Arduino Uno R3 (ATmega328P)</td>
+                <td>Familiar from COMPSYS201, with hardware interrupts for reading the encoder.</td>
+              </tr>
+              <tr>
+                <td>Actuator</td>
+                <td>NEMA17 stepper motor</td>
+                <td>Holds its commanded position, which simplifies the arm dynamics.</td>
+              </tr>
+              <tr>
+                <td>Motor driver</td>
+                <td>TMC2209 SilentStepStick</td>
+                <td>Adjustable current limit and quiet microstepping, after the A4988 and DRV8825 failed.</td>
+              </tr>
+              <tr>
+                <td>Sensor</td>
+                <td>Quadrature encoder</td>
+                <td>Measures the pendulum angle precisely at 1600 steps per revolution.</td>
+              </tr>
+              <tr>
+                <td>Pendulum rod</td>
+                <td>Found rod with a 90&deg; bend</td>
+                <td>Already the right shape and height for a rotary pendulum.</td>
+              </tr>
+              <tr>
+                <td>Frame</td>
+                <td>3D printed tower (sourced files)</td>
+                <td>Rigid support that matched the rod size, without designing it from scratch.</td>
+              </tr>
+              <tr>
+                <td>Shaft adapter</td>
+                <td>Custom part, Fusion 360</td>
+                <td>Joins the 6 mm encoder shaft to the 6.1 to 6.2 mm rod.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          The adapter was the one part I designed myself. The first version was too short and let the rod wobble,
+          which threw off encoder alignment, so I remodelled it taller with a more rigid fit.
+        </p>
+
+        <div class="figure-row">
+          <figure>
+            <button class="gallery-button" type="button">
+              <img src="AdapterTooSmall.jpg" alt="First motor-encoder adapter">
+            </button>
+            <figcaption>Figure 3: The first adapter, which was too short and allowed wobble.</figcaption>
+          </figure>
+          <figure>
+            <button class="gallery-button" type="button">
+              <img src="TMC2209OnBreadBoard.jpg" alt="TMC2209 stepper driver on a breadboard">
+            </button>
+            <figcaption>Figure 4: TMC2209 stepper driver on a breadboard.</figcaption>
+          </figure>
+        </div>
+
+        <!-- ================= MODELLING ================= -->
+        <h2>Mathematical Modelling and Control</h2>
+        <p>
+          I began with cascaded PID, but tuning it by trial and error never produced stable balancing, which is what led me to LQR. That pushed me
+          to teach myself state-space modelling and LQR, mostly through MATLAB's YouTube lectures and other
+          controls resources. I modelled the pendulum with a linearised state-space equation:
+        </p>
+
+        <p class="equation center">&#7819; = Ax + Bu</p>
+
+        <p>with the state vector</p>
+
+        <p class="equation center">x = [&theta;, &theta;&#775;, &alpha;, &alpha;&#775;]</p>
+
+        <p>
+          where &theta; is the motor shaft angle and &alpha; is the pendulum angle from upright. The measured arm
+          length, pendulum length and pendulum mass gave the A and B matrices.
+        </p>
+
+        <figure class="wide">
+          <button class="gallery-button diagram-button" type="button">
+            <img src="ControlsDiagram.png" alt="LQR control block diagram for the Furuta pendulum">
+          </button>
+          <figcaption>
+            Figure 5: LQR control flow showing state feedback, velocity integration, command limits, motor control
+            and encoder-based state estimation. Click to enlarge.
+          </figcaption>
+        </figure>
+
+        <h3>Choosing the gains</h3>
+        <p>
+          LQR picks the feedback gains by minimising a cost that trades off state error (weighted by Q) against
+          motor effort (weighted by R). I penalised the pendulum angle most heavily, since keeping the rod upright
+          was the main goal:
+        </p>
+
+        <pre><code>Q = diag([1, 0.1, 200, 20]);
+R = 0.05;</code></pre>
+
+        <p>MATLAB solved the Riccati equation for the gain matrix K, one gain per state:</p>
+
+        <pre><code>K = [-4.47, -4.40, 824.2, 97.9]</code></pre>
+        <figure class="wide" style="max-width: 520px; margin-left: auto; margin-right: auto;">
+        <button class="gallery-button diagram-button" type="button">
+            <img src="matlabscript.png" alt="MATLAB script building the state-space model and computing the LQR gains">
+          </button>
+          <figcaption>
+            Figure 6: MATLAB script that builds the state-space model from the measured hardware and computes the
+            LQR gains. Click to enlarge.
+          </figcaption>
+        </figure>
+        <p>
+          The arm gains carried over to the firmware unchanged. The pendulum gains were converted from radians to
+          encoder steps (1600 steps per revolution):
+        </p>
+
+        <pre><code>K&alpha;  = 824.2 &times; 1600/360 = 3663.2
+K&alpha;&#775; = 97.9  &times; 1600/360 = 435.0</code></pre>
+
+        <p>Every control cycle, the controller combines all four states into one command:</p>
+
+        <p class="equation center">e = r &minus; x, &nbsp; u = Ke</p>
+
+        <p>
+          Tuning Q and R was iterative. Stronger pendulum gains corrected faster but made the arm jittery, while
+          softer gains were smoother but let the rod lean further before reacting.
+        </p>
+
+        <h3>Assumptions</h3>
+        <ul class="project-bullet-list">
+          <li>The rod is a rigid body with fixed length and mass distribution.</li>
+          <li>Friction at the encoder pivot is negligible.</li>
+          <li>The encoder never misses a count, and its upright zero reference never drifts.</li>
+          <li>The stepper holds position regardless of the rod, so the arm is treated as an independent input
+            rather than coupled to the pendulum.</li>
+          <li>The model is linearised about upright, so it is only valid near vertical.</li>
+        </ul>
+
+        <!-- ================= IMPLEMENTATION ================= -->
+        <h2>Hardware and Signal Implementation</h2>
+        <p>
+          The hardest problem was noisy encoder readings. I probed the signals on an oscilloscope to rule out
+          wiring, pull-ups, power and code. The fault turned out to be a bad USB cable to the Arduino, and replacing
+          it made the controller far more consistent.
+        </p>
+        <p>
+          To keep the signals clean, I added pull-up resistors on the encoder lines so they never float between
+          logic thresholds, and a 100 &micro;F capacitor across the motor supply to absorb the voltage dips the
+          stepper causes when it starts, stops or changes speed. ELECTENG209 framed this well: real signals are
+          never the clean lines they are on paper, so the design has to work in the noise.
+        </p>
+
+        <h3>Setting the driver current</h3>
+        <p>
+          The TMC2209 sets its coil current from VREF, which I adjusted with its potentiometer. I targeted about
+          90% of the motor's rating (1.33 A RMS) to prevent overheating, using the relationship from the
+          SilentStepStick datasheet with its 0.11 &Omega; sense resistor:
+        </p>
+
+        <pre><code>VREF = Irms &times; 2.5 &times; &radic;2 &times; Rsense
+VREF = 1.33 &times; 2.5 &times; &radic;2 &times; 0.11 &asymp; 0.5 V</code></pre>
+
+        <!-- ================= RESULTS ================= -->
+        <h2>Results</h2>
+        <figure>
+          <video src="FurutaVid3.mp4" poster="MainFurutaPic.jpg" controls muted loop playsinline preload="metadata"
+            aria-label="Furuta pendulum balancing demo">
+            Your browser can't play this video.
+          </video>
+          <figcaption>Video 1: The pendulum balancing under LQR control.</figcaption>
+        </figure>
+        <p>
+          Once tuned, the pendulum stays upright indefinitely, settling within about 1 to 2&deg; of vertical. It
+          recovers from light taps up to the 45&deg; give-up angle, past which the controller disengages. A small
+          steady wobble remains from the stepper's finite step size.
+        </p>
+
+        <!-- ================= DRAWBACKS ================= -->
+        <h2>Drawbacks and Hardware Iteration</h2>
+        <p>
+          The build took several iterations. I killed my first A4988 and DRV8825 drivers, which I put down to
+          having no capacitor on the supply (though disconnecting the motor while powered is another common cause),
+          before moving to the TMC2209. The first shaft adapter wobbled and had to be redesigned, and the PID
+          controller was replaced by LQR.
+        </p>
+        <p>
+          The main limitation is that LQR only works near upright, so the pendulum has to be placed vertically by
+          hand. My next goal is swing-up control: training a reinforcement learning policy in MuJoCo, MATLAB and
+          Simulink, then handing over to the existing LQR controller near the top.
+        </p>
+        <p>
+          The biggest lesson was that a controller is only as good as the signals feeding it. Debugging the
+          physical system mattered just as much as the code.
+        </p>
+
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="small-print">&copy; 2026 Marco Lau.</p>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">&times;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    const galleryButtons = document.querySelectorAll(".gallery-button");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxClose = document.querySelector(".lightbox-close");
+
+    galleryButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const img = button.querySelector("img");
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add("active");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = "";
+      lightboxImg.alt = "";
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("active")) closeLightbox();
+    });
+  </script>
+</body>
+
+</html>

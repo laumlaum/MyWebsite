@@ -44,6 +44,7 @@
         <div class="status-row">
         </div>
 
+
         <h1>Furuta Pendulum</h1>
 
         <p class="intro">
@@ -51,9 +52,11 @@
           I used an Arduino Uno, a stepper motor, and a quadrature encoder, with LQR control
           to balance the pendulum upright.
         </p>
+        <div class="hero-actions">
+          <a class="button" href="pendulum.html">Read the compact version</a>
+        </div>
 
 
-  
       </div>
 
       <div class="project-hero-image image-hero video-hero youtube-hero">
@@ -101,7 +104,7 @@
                   <p>
                     I first tried a basic cascaded PID controller, but it was difficult to tune and did
                     not give the stability I wanted. This pushed me to learn more controls theory by
-                    myself, especially PID tuning, state-space modelling, and LQR control. A large part
+                    myself in particular, state-space modelling, and LQR control. A large part
                     of this project was spent researching YouTube lectures and tutorials, including
                     videos from the MATLAB channel and other controls-focused resources, then applying
                     that theory to my own hardware.
@@ -260,6 +263,15 @@
                     produced the A and B matrices that describe the system motion.
                   </p>
 
+                  <figure class="control-diagram" style="max-width: 520px; margin-left: auto; margin-right: auto;">
+                  <button class="gallery-button diagram-button" type="button">
+                      <img src="matlabscript.png" alt="MATLAB script building the state-space model and computing the LQR gains">
+                    </button>
+                    <figcaption>
+                      MATLAB script that builds the state-space model from the measured arm length, pendulum length
+                      and mass, then computes the LQR gains.
+                    </figcaption>
+                  </figure>
                   <p>
                     I then used MATLAB to calculate the LQR gains. The controller was tuned using:
                   </p>
@@ -279,6 +291,17 @@ R = 0.05;</code></pre>
                   </p>
 
                   <pre><code>K = [-4.47, -4.40, 824.2, 97.9]</code></pre>
+                  <figure class="wide">
+                    <button class="gallery-button diagram-button" type="button">
+                      <img src="matlabscript.png"
+                        alt="MATLAB script building the state-space model and computing the LQR gains">
+                    </button>
+                    <figcaption>
+                      Figure 6: MATLAB script that builds the state-space model from the measured hardware and computes
+                      the
+                      LQR gains. Click to enlarge.
+                    </figcaption>
+                  </figure>
 
                   <p>
                     These gains then had to be converted into the units the firmware actually works in. The
