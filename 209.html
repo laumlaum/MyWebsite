@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco Lau | Smart Energy Monitor</title>
+  <meta name="description"
+    content="ELECTENG 209 smart energy monitor by Marco Lau and Team 09: ATmega328PB, op amp voltage and current sensing, Schmitt trigger zero crossing, and a 2-layer Altium PCB.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">ML</span>
+        <span>Marco Lau</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="education.html">Education</a>
+        <a href="contact.html">Contact</a>
+        <a href="resume.html">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap project-hero project-hero-split">
+      <div class="project-hero-text">
+        <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+        <div class="kicker">University project &middot; ELECTENG 209</div>
+
+        <div class="status-row">
+          <span class="status-chip" style="border-color:#b5773f;color:#b5773f;">In progress</span>
+        </div>
+
+        <h1>Smart Energy Monitor</h1>
+
+        <p class="intro">
+          A four person team project to measure the voltage, current and power of an AC load and display it live.
+        </p>
+
+        <div class="tags">
+          <span class="tag">Altium Designer</span>
+          <span class="tag">ATmega328PB</span>
+          <span class="tag">Op Amps</span>
+          <span class="tag">Analog Front End</span>
+          <span class="tag">2-Layer PCB</span>
+        </div>
+      </div>
+
+      <div class="project-hero-image image-hero">
+        <img src="EnergyMonitorPCB.png" alt="Two-layer Altium PCB layout of the smart energy monitor">
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="project-detail-layout">
+          <article class="project-main-card">
+            <div class="build-log">
+
+              <div class="build-log-step">
+                <div class="build-log-label">The Task</div>
+                <div class="build-log-content">
+                  <p>
+                    ELECTENG 209 set the brief: design a working energy monitor that measures the voltage, current
+                    and power drawn by a real AC load and displays the result on a 4-digit 7-segment display. Every
+                    stage of the course had to work together on one board, sensing, amplification, filtering, power
+                    supply and firmware, rather than as separate exercises.
+                  </p>
+                  <p>
+                    We worked as Team 09, a group of four. I took the hardware: the analog front end and the full
+                    PCB layout in Altium, with input into the firmware wherever a hardware decision shaped how a
+                    signal needed to be sampled.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Key Objectives</div>
+                <div class="build-log-content">
+                  <p>The board needed to:</p>
+                  <ul class="project-bullet-list">
+                    <li>Scale and level shift the AC voltage and current into the ADC's 0 to 5V range</li>
+                    <li>Amplify and filter both signals without distorting the 500Hz fundamental</li>
+                    <li>Detect the voltage zero crossing in hardware for timing</li>
+                    <li>Generate its own regulated 5V rail from the AC input</li>
+                    <li>Survive a 2-layer, through-hole, fully hand-soldered build</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Prototyping &amp; Iteration</div>
+                <div class="build-log-content">
+                  <p>Getting there took a few rounds of recalculating against the real spec rather than trusting a first pass:</p>
+                  <ul class="project-bullet-list">
+                    <li>Derived the diff-amp gains and the offset buffer from the actual 2.5 to 7.5VA load range, not a textbook example</li>
+                    <li>Sized the Schmitt trigger's hysteresis band as a trade-off, too little and it chattered, too much and the detected edge drifted from the true crossing</li>
+                    <li>Split the ground and 5V copper pours so the power rail couldn't couple noise into the sense signals</li>
+                    <li>Traced a bring-up fault, where populating the comparator stage disturbed the offset and 5V rails, back to a solder joint</li>
+                  </ul>
+                  <div class="side-gallery">
+                    <button class="gallery-button" type="button">
+                      <img src="EnergyMonitorPCB.png" alt="Two-layer PCB layout in Altium">
+                    </button>
+                    <button class="gallery-button" type="button">
+                      <img src="EnergyMonitorSchematic.png" alt="Full schematic of the smart energy monitor">
+                    </button>
+                    <button class="gallery-button" type="button">
+                      <img src="scope-vzvc.png" alt="Oscilloscope capture at a test point during bring-up">
+                    </button>
+                  </div>
+                  <p><em>PCB layout, full schematic, and a bring-up scope capture (placeholder, swapping in the real one shortly).</em></p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Design Nuances</div>
+                <div class="build-log-content">
+                  <p><strong>PCB design</strong></p>
+                  <ul class="project-bullet-list">
+                    <li>GND pour runs continuously under every signal trace, since return current takes the lowest impedance path back to source, if there's no copper directly beneath, it finds a longer, noisier loop instead</li>
+                    <li>5V pour deliberately isolated from the signal traces, since it bounces a little every time an op amp output swings or the comparator switches, routing anything sensitive too close would couple that bounce straight into the measurement</li>
+                    <li>ISENSP, the shunt's hot node, flooded rather than routed as a thin trace, since it carries real load current and any trace resistance there adds directly to the voltage the current amplifier is trying to measure</li>
+                    <li>Decoupling caps placed within a few millimetres of the LM324's supply pins, since all four op amp sections share one pin pair and a transient from any one of them shows up on the others otherwise</li>
+                    <li>Test points planned before population, which is what let us localize the rail disturbance fault with a scope instead of guessing</li>
+                  </ul>
+                  <p><strong>Hardware design</strong></p>
+                  <ul class="project-bullet-list">
+                    <li>Kept the small feedback stability cap separate in purpose from the actual anti-aliasing filter, both look like "a filter" on paper, but mixing up their roles would quietly distort the 500Hz signal instead of just cleaning it up</li>
+                    <li>Buffered the 2.1V offset with its own op amp stage so one channel's loading can't drag the reference the other channel is measured against</li>
+                    <li>Sized the Schmitt trigger's hysteresis as a trade-off between chatter and phase error, and found the resulting error depends only on the hysteresis to signal amplitude ratio, not on line frequency</li>
+                    <li>Clamp diodes on the amplifier inputs guard against the specific transient an inductive load throws back through the sense resistors, not generic protection</li>
+                    <li>Used firmware interpolation instead of a second hardware comparator for the current zero crossing, since no spare op amp section was available, arguably more accurate anyway since it skips a comparator's own propagation delay and hysteresis error</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">The Build So Far</div>
+                <div class="build-log-content">
+                  <p>
+                    The board sits between the AC supply and the load. It senses voltage through a divider and
+                    current through a shunt, conditions both with op amps, and the ATmega328PB samples them to
+                    calculate RMS voltage, RMS current and power.
+                  </p>
+                  <p>
+                    Voltage sensing, current sensing, the offset reference and the regulator all check out on the
+                    bench. What's left is the firmware: the current channel has no hardware comparator, so its zero
+                    crossing has to come from interpolating ADC samples instead, and that piece, along with the
+                    display driver, is still being written.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Personal Contributions</div>
+                <div class="build-log-content">
+                  <p>My main contributions:</p>
+                  <ul class="project-bullet-list">
+                    <li>Derived the differential amplifier, filter and hysteresis values from the project's real electrical spec</li>
+                    <li>Designed and laid out the full 2-layer board in Altium, including the ground/power pour split and decoupling placement</li>
+                    <li>Planned labelled test points for every stage ahead of assembly</li>
+                    <li>Helped shape the firmware's ADC sampling and current zero-crossing approach once the hardware limits were clear</li>
+                  </ul>
+                  <p>
+                    I also hand-soldered the populated board myself, a dense mix of through-hole op amp, shunt and
+                    screw terminal footprints, and did the bring-up debugging with a multimeter and oscilloscope when
+                    the comparator stage started disturbing nearby rails.
+                  </p>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Relevant Skills</div>
+                <div class="build-log-content">
+                  <p><strong>Technical</strong></p>
+                  <ul class="project-bullet-list">
+                    <li>Altium Designer schematic capture and PCB layout</li>
+                    <li>Analog signal conditioning (differential amplifiers, filters, comparators)</li>
+                    <li>Embedded C on the ATmega328P (ADC, interrupts, UART)</li>
+                    <li>Oscilloscope and multimeter based debugging</li>
+                  </ul>
+                  <p><strong>Soft</strong></p>
+                  <ul class="project-bullet-list">
+                    <li>Coordinating hardware decisions with teammates writing the firmware</li>
+                    <li>Working inside fixed footprint, library and board-size constraints</li>
+                    <li>Documenting a design so somebody else could rebuild it</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="build-log-step">
+                <div class="build-log-label">Reflection</div>
+                <div class="build-log-content">
+                  <p>
+                    The hardware mostly worked as calculated, which was a relief, but it also meant the harder
+                    problems showed up elsewhere. Missing a spare op amp section for a second comparator pushed the
+                    current zero crossing into firmware, a workable trade-off, but one I'd avoid next time by
+                    budgeting for it before the layout was locked in.
+                  </p>
+                  <p>
+                    The bring-up issue was the bigger lesson. A correct schematic didn't guarantee a correct board,
+                    and it took an actual multimeter on an actual solder joint to find what a review on screen
+                    couldn't.
+                  </p>
+                  <p>
+                    There's still firmware to finish and a board to fully validate, but the parts that are done
+                    taught me more about real analog design than any lab did on its own.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </article>
+
+          <aside class="project-side-card">
+            <h2>Project gallery</h2>
+
+            <div class="side-gallery">
+              <button class="gallery-button" type="button">
+                <img src="EnergyMonitorPCB.png" alt="Two-layer PCB layout in Altium">
+              </button>
+
+              <button class="gallery-button" type="button">
+                <img src="EnergyMonitorSchematic.png" alt="Energy monitor schematic">
+              </button>
+            </div>
+
+            <div class="side-specs">
+              <h2>Specs</h2>
+              <div class="specs-list">
+                <div class="spec-row"><strong>Status</strong><span>In progress</span></div>
+                <div class="spec-row"><strong>Team</strong><span>Team 09, four members</span></div>
+                <div class="spec-row"><strong>My role</strong><span>PCB and hardware design, firmware input</span></div>
+                <div class="spec-row"><strong>MCU</strong><span>ATmega328PB Xplained Mini</span></div>
+                <div class="spec-row"><strong>Measures</strong><span>Voltage, current, power</span></div>
+                <div class="spec-row"><strong>Display</strong><span>4-digit 7-segment</span></div>
+                <div class="spec-row"><strong>PCB</strong><span>2-layer, Altium Designer</span></div>
+                <div class="spec-row"><strong>Supply</strong><span>Half-wave rectified, regulated 5 V</span></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="small-print">&copy; 2026 Marco Lau.</p>
+    </div>
+  </footer>
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">&times;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+  <script>
+    const galleryButtons = document.querySelectorAll(".gallery-button");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxClose = document.querySelector(".lightbox-close");
+
+    galleryButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const img = button.querySelector("img");
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add("active");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = "";
+      lightboxImg.alt = "";
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("active")) closeLightbox();
+    });
+  </script>
+</body>
+
+</html>
